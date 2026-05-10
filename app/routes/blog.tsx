@@ -40,8 +40,7 @@ export default function Blog() {
             {blogPosts && blogPosts.map((post) => (
                 <BlogPost key={post.id} name={post.name} pip={post.pip} about={post.about}/>
             ))}
-            {count > increment && 
-            }
+            
         </section>       
     )
 }
