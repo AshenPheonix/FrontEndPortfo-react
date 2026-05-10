@@ -1,0 +1,8 @@
+export default function NotFound() {
+    return (
+        <section className="error">
+            <h1>Page Not Found</h1>
+            <p>The requested page could not be found. Please check the URL and try again.</p>
+        </section>
+    )
+}
