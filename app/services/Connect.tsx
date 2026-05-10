@@ -20,7 +20,7 @@ export function getPosts(lastPost=0){
             catchError(error => {
                 console.error('There was a problem with the fetch operation:', error);
                 return of([]);
-            }
+            })
         )
     } else {
         return fromFetch(`${process.env.server}/postsOffset?offset=${lastPost}`, {
