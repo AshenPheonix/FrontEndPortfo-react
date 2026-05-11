@@ -2,3 +2,8 @@
 * {
     box-sizing: border-box;
 }
+
+nav{
+    background-color: #bb3910;
+    color: white;
+}
