@@ -1,10 +1,12 @@
 import { fromFetch } from "rxjs/fetch";
-import 'dotenv/config';
 import { catchError, of, switchMap } from "rxjs";
+const server = import.meta.env.VITE_SERVER_URL;
+
+let lastpost = 0;
 
 export function getPosts(lastPost=0){
     if (lastPost === 0) {
-        return  fromFetch(`${process.env.server}/posts`, {
+        return  fromFetch(`${server}/blog`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -12,7 +14,9 @@ export function getPosts(lastPost=0){
         }).pipe(
             switchMap(response => {
                 if (response.ok) {
-                    return response.json();
+                    const ret = response.json();
+                    lastpost = ret?.length || 0;
+                    return ret;
                 } else {
                     return of({error: true, message: `Error ${response.status}`});
                 }
@@ -23,7 +27,7 @@ export function getPosts(lastPost=0){
             })
         )
     } else {
-        return fromFetch(`${process.env.server}/postsOffset?offset=${lastPost}`, {
+        return fromFetch(`${server}/blog/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -45,7 +49,7 @@ export function getPosts(lastPost=0){
 }
 
 export function getPost(which:number){
-    return fromFetch(`${process.env.server}/posts/${which}`, {
+    return fromFetch(`${server}/posts/${which}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
