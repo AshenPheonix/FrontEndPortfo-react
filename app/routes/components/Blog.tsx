@@ -1,15 +1,13 @@
 type blogProps = {
-    name: string;
+    title: string;
     pip: string;
-    about: string;
 }
 
-export default function BlogPost({ name, pip, about }: blogProps) {
+export default function BlogPost({ title, pip }: blogProps) {
     return (
-        <div className="blog">
-            <h2 className="blog-title">{name}</h2>
+        <div className="blog w-50 ml-5 mt-5 p-5">
+            <h2 className="blog-title">{title}</h2>
             <p className="blog-pip">{pip}</p>
-            <p className="blog-about">{about}</p>
         </div>
     );
 }

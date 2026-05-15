@@ -1,70 +1,25 @@
-import { fromFetch } from "rxjs/fetch";
-import { catchError, of, switchMap } from "rxjs";
+import axios from "axios";
+
 const server = import.meta.env.VITE_SERVER_URL;
 
 let lastpost = 0;
 
-export function getPosts(lastPost=0){
-    if (lastPost === 0) {
-        return  fromFetch(`${server}/blog`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).pipe(
-            switchMap(response => {
-                if (response.ok) {
-                    const ret = response.json();
-                    lastpost = ret?.length || 0;
-                    return ret;
-                } else {
-                    return of({error: true, message: `Error ${response.status}`});
-                }
-            }),
-            catchError(error => {
-                console.error('There was a problem with the fetch operation:', error);
-                return of([]);
-            })
-        )
-    } else {
-        return fromFetch(`${server}/blog/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).pipe(
-            switchMap(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return of({error: true, message: `Error ${response.status}`});
-                }
-            }),
-            catchError(error => {
-                console.error('There was a problem with the fetch operation:', error);
-                return of([]);
-            })
-        );
+export async function getPosts(lastPost=0){
+    if(lastPost == 0){
+        const response =  await axios.get(`${server}/blog`);
+        const data = response.data;
+        lastpost = data.count;
+        return data;
+    }
+    if (lastpost >0) {
+        const response =  await axios.get(`${server}/blog?offset=${lastPost+1}`);
+        const data = response.data;
+        lastpost = data.count+lastPost;
+        return data;
     }
 }
-
-export function getPost(which:number){
-    return fromFetch(`${server}/posts/${which}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).pipe(
-        switchMap(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return of({error: true, message: `Error ${response.status}`});
-            }
-        }),
-        catchError(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            return of([]);
-        })
-    );
+export async function getPost(id:number){
+    const response =  await axios.get(`${server}/blog/${id}`);
+    const data = response.data;
+    return data;
 }

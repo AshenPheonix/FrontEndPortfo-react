@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 
 export default function MainNav(){
     return (
-        <section className="flex h-screen">
+        <section className="flex h-screen w-full">
             <nav className="w-1/12 p-4">
                 <ul className="flex flex-col gap-4">
                     <li>
